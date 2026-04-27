@@ -403,6 +403,66 @@
   .marker-pin.food { background: #e67e22; }
   .marker-pin.start { background: #16a085; }
 
+
+  /* ====== User Location ====== */
+  .user-dot {
+    width: 18px;
+    height: 18px;
+    background: #4285f4;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
+    position: relative;
+  }
+  .user-dot::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background: rgba(66,133,244,0.28);
+    border-radius: 50%;
+    animation: userPulse 2s infinite ease-out;
+  }
+  @keyframes userPulse {
+    0%   { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+  .leaflet-control.locate-control { margin: 10px; }
+  .locate-btn {
+    width: 36px;
+    height: 36px;
+    background: white;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
+  }
+  .locate-btn:active { transform: scale(0.94); }
+  .locate-btn.active {
+    background: #4285f4;
+    color: white;
+  }
+  .locate-btn.loading { opacity: 0.6; cursor: wait; }
+  .locate-toast {
+    position: absolute;
+    top: 56px;
+    right: 10px;
+    background: rgba(20,32,46,0.92);
+    color: white;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    z-index: 1000;
+    max-width: 240px;
+    line-height: 1.4;
+    pointer-events: none;
+    animation: fadeIn 0.2s ease;
+  }
+
   /* ====== Legend ====== */
   .legend {
     display: flex;
@@ -990,6 +1050,7 @@
       });
       map.fitBounds(L.featureGroup(markers).getBounds().pad(0.2));
       mapInstances[day] = { map, markers };
+      addLocateButton(day);
 
       // build stops legend
       const stopsEl = document.getElementById(stopsId);
@@ -1016,6 +1077,132 @@
       // Force redraw on toggle (Leaflet bug when initialized while hidden)
       setTimeout(() => mapInstances[day].map.invalidateSize(), 50);
     }
+  }
+
+
+  // ============ User Location (Geolocation) ============
+  const userLoc = {}; // per-day: { dot, accCircle, watchId, btn }
+
+  function setLocateState(day, state) {
+    const btn = userLoc[day]?.btn;
+    if (!btn) return;
+    btn.classList.toggle('loading', state === 'loading');
+    btn.classList.toggle('active', state === 'active');
+  }
+
+  function showToast(day, msg, ms) {
+    const view = document.querySelector('.map-view[data-map-day="' + day + '"]');
+    if (!view) return;
+    const old = view.querySelector('.locate-toast');
+    if (old) old.remove();
+    const t = document.createElement('div');
+    t.className = 'locate-toast';
+    t.textContent = msg;
+    view.style.position = 'relative';
+    view.appendChild(t);
+    setTimeout(() => t.remove(), ms || 3500);
+  }
+
+  function startLocate(day) {
+    if (!navigator.geolocation) {
+      showToast(day, '此瀏覽器不支援定位');
+      return;
+    }
+    const map = mapInstances[day]?.map;
+    if (!map) return;
+    setLocateState(day, 'loading');
+
+    function update(pos) {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      const acc = pos.coords.accuracy || 30;
+      const isFirst = !userLoc[day].dot;
+      if (isFirst) {
+        const dotIcon = L.divIcon({
+          className: '',
+          html: '<div class="user-dot"></div>',
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+        });
+        userLoc[day].dot = L.marker([lat, lng], { icon: dotIcon, zIndexOffset: 1000 }).addTo(map);
+        userLoc[day].accCircle = L.circle([lat, lng], {
+          radius: acc,
+          color: '#4285f4',
+          fillColor: '#4285f4',
+          fillOpacity: 0.08,
+          weight: 1,
+        }).addTo(map);
+        // Fit map to show user + all stops
+        const stops = DAY_LOCATIONS[day];
+        const bounds = L.latLngBounds([[lat, lng]].concat(stops.map(s => [s.lat, s.lng])));
+        map.fitBounds(bounds.pad(0.15));
+        setLocateState(day, 'active');
+        showToast(day, '已找到你的位置（精度 ±' + Math.round(acc) + ' 公尺）', 2500);
+      } else {
+        userLoc[day].dot.setLatLng([lat, lng]);
+        userLoc[day].accCircle.setLatLng([lat, lng]).setRadius(acc);
+      }
+    }
+
+    function fail(err) {
+      setLocateState(day, 'idle');
+      const msgs = {
+        1: '定位權限被拒絕，請在瀏覽器設定中允許',
+        2: '無法取得位置（GPS 訊號不足）',
+        3: '定位逾時，請再試一次',
+      };
+      showToast(day, msgs[err.code] || ('定位失敗：' + err.message), 4500);
+      stopLocate(day);
+    }
+
+    if (!userLoc[day]) userLoc[day] = {};
+    navigator.geolocation.getCurrentPosition(update, fail, {
+      enableHighAccuracy: true,
+      timeout: 12000,
+      maximumAge: 0,
+    });
+    userLoc[day].watchId = navigator.geolocation.watchPosition(update, () => {}, {
+      enableHighAccuracy: true,
+      timeout: 30000,
+      maximumAge: 5000,
+    });
+  }
+
+  function stopLocate(day) {
+    const u = userLoc[day];
+    if (!u) return;
+    if (u.watchId != null) navigator.geolocation.clearWatch(u.watchId);
+    if (u.dot) u.dot.remove();
+    if (u.accCircle) u.accCircle.remove();
+    const btn = u.btn;
+    userLoc[day] = btn ? { btn } : {};
+    setLocateState(day, 'idle');
+  }
+
+  function addLocateButton(day) {
+    const map = mapInstances[day].map;
+    const Ctrl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function() {
+        const wrap = L.DomUtil.create('div', 'leaflet-control locate-control');
+        const btn = L.DomUtil.create('button', 'locate-btn', wrap);
+        btn.type = 'button';
+        btn.innerHTML = '📍';
+        btn.title = '顯示我的位置';
+        L.DomEvent.disableClickPropagation(wrap);
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('active')) {
+            stopLocate(day);
+          } else {
+            startLocate(day);
+          }
+        });
+        if (!userLoc[day]) userLoc[day] = {};
+        userLoc[day].btn = btn;
+        return wrap;
+      },
+    });
+    new Ctrl().addTo(map);
   }
 
   // Hook up toggle buttons
