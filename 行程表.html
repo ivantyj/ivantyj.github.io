@@ -271,6 +271,138 @@
   .alt-options ul { margin: 8px 0 0; padding-left: 18px; font-size: 12px; color: #5a6b7e; }
   .alt-options li { margin-bottom: 3px; }
 
+
+  /* ====== Map Mode ====== */
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .day-header > div { flex: 1; min-width: 0; }
+  .map-toggle {
+    background: #0a3d62;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(10,61,98,0.25);
+    transition: transform 0.15s ease;
+  }
+  .map-toggle:active { transform: scale(0.96); }
+  .map-toggle.active {
+    background: #fff;
+    color: #0a3d62;
+    box-shadow: inset 0 0 0 1.5px #0a3d62;
+  }
+  .map-view {
+    display: none;
+    margin-top: 4px;
+    animation: fadeIn 0.3s ease;
+  }
+  .map-view.active { display: block; }
+  .map-canvas {
+    height: 58vh;
+    min-height: 380px;
+    max-height: 560px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(15,52,96,0.12);
+    background: #e8eef4;
+    z-index: 1;
+  }
+  .map-canvas .leaflet-control-attribution { font-size: 9px; }
+  .map-stops {
+    margin-top: 12px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 4px;
+    box-shadow: 0 2px 10px rgba(15,52,96,0.06);
+  }
+  .map-stop {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .map-stop:hover { background: #f0f4f8; }
+  .map-stop + .map-stop { border-top: 1px solid #f0f4f8; }
+  .stop-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #0a3d62;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .stop-num.purple { background: #8e44ad; }
+  .stop-num.blue { background: #2980b9; }
+  .stop-num.food { background: #e67e22; }
+  .stop-time {
+    font-size: 12px;
+    color: #6b7c93;
+    font-weight: 600;
+    flex-shrink: 0;
+    min-width: 50px;
+  }
+  .stop-name {
+    font-size: 14px;
+    color: #1a2332;
+    flex: 1;
+    min-width: 0;
+  }
+  .open-gmaps {
+    display: block;
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+    color: #fff;
+    text-align: center;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 3px 12px rgba(66,133,244,0.3);
+  }
+  .open-gmaps:active { transform: scale(0.98); }
+  /* Hide timeline when map is active */
+  .day.map-mode .timeline { display: none; }
+  /* Custom Leaflet marker */
+  .num-marker { background: transparent; border: none; }
+  .marker-pin {
+    width: 32px;
+    height: 32px;
+    background: #0a3d62;
+    color: #fff;
+    border-radius: 50% 50% 50% 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+    border: 2px solid white;
+    transform: rotate(-45deg);
+  }
+  .marker-pin span { transform: rotate(45deg); }
+  .marker-pin.purple { background: #8e44ad; }
+  .marker-pin.blue { background: #2980b9; }
+  .marker-pin.food { background: #e67e22; }
+  .marker-pin.start { background: #16a085; }
+
   /* ====== Legend ====== */
   .legend {
     display: flex;
@@ -330,6 +462,7 @@
     .event-title { font-size: 17px; }
   }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="">
 </head>
 <body>
 
@@ -354,8 +487,11 @@
 <!-- ============ DAY 1 ============ -->
 <section class="day active" data-day="1">
   <header class="day-header">
-    <h2 class="day-title">Day 1 · 抵達釜山</h2>
-    <p class="day-area">5/8 (五)　台北 ✈️ 釜山 → 廣安里</p>
+    <div>
+      <h2 class="day-title">Day 1 · 抵達釜山</h2>
+      <p class="day-area">5/8 (五)　台北 ✈️ 釜山 → 廣安里</p>
+    </div>
+    <button class="map-toggle" data-toggle-day="1">📍 看地圖</button>
   </header>
 
   <div class="timeline">
@@ -400,13 +536,21 @@
     </article>
 
   </div>
+  <div class="map-view" data-map-day="1">
+    <div class="map-canvas" id="map-canvas-1"></div>
+    <div class="map-stops" id="map-stops-1"></div>
+    <a class="open-gmaps" id="open-gmaps-1" href="#" target="_blank" rel="noopener">🚗 在 Google Maps 開啟路線</a>
+  </div>
 </section>
 
 <!-- ============ DAY 2 ============ -->
 <section class="day" data-day="2">
   <header class="day-header">
-    <h2 class="day-title">Day 2 · 南浦 / 影島 / 松島</h2>
-    <p class="day-area">5/9 (六)　含廣安里 M 無人機燈光秀</p>
+    <div>
+      <h2 class="day-title">Day 2 · 南浦 / 影島 / 松島</h2>
+      <p class="day-area">5/9 (六)　含廣安里 M 無人機燈光秀</p>
+    </div>
+    <button class="map-toggle" data-toggle-day="2">📍 看地圖</button>
   </header>
 
   <div class="timeline">
@@ -511,13 +655,21 @@
     </article>
 
   </div>
+  <div class="map-view" data-map-day="2">
+    <div class="map-canvas" id="map-canvas-2"></div>
+    <div class="map-stops" id="map-stops-2"></div>
+    <a class="open-gmaps" id="open-gmaps-2" href="#" target="_blank" rel="noopener">🚗 在 Google Maps 開啟路線</a>
+  </div>
 </section>
 
 <!-- ============ DAY 3 ============ -->
 <section class="day" data-day="3">
   <header class="day-header">
-    <h2 class="day-title">Day 3 · 西面 / 廣安里 / Spaland</h2>
-    <p class="day-area">5/10 (日)　時間較彈性</p>
+    <div>
+      <h2 class="day-title">Day 3 · 西面 / 廣安里 / Spaland</h2>
+      <p class="day-area">5/10 (日)　時間較彈性</p>
+    </div>
+    <button class="map-toggle" data-toggle-day="3">📍 看地圖</button>
   </header>
 
   <div class="timeline">
@@ -564,13 +716,21 @@
     </article>
 
   </div>
+  <div class="map-view" data-map-day="3">
+    <div class="map-canvas" id="map-canvas-3"></div>
+    <div class="map-stops" id="map-stops-3"></div>
+    <a class="open-gmaps" id="open-gmaps-3" href="#" target="_blank" rel="noopener">🚗 在 Google Maps 開啟路線</a>
+  </div>
 </section>
 
 <!-- ============ DAY 4 ============ -->
 <section class="day" data-day="4">
   <header class="day-header">
-    <h2 class="day-title">Day 4 · 海雲台 / Osiria</h2>
-    <p class="day-area">5/11 (一)　已選 A1 方案：多逛 Outlet</p>
+    <div>
+      <h2 class="day-title">Day 4 · 海雲台 / Osiria</h2>
+      <p class="day-area">5/11 (一)　已選 A1 方案：多逛 Outlet</p>
+    </div>
+    <button class="map-toggle" data-toggle-day="4">📍 看地圖</button>
   </header>
 
   <div class="timeline">
@@ -650,13 +810,20 @@
     </details>
 
   </div>
+  <div class="map-view" data-map-day="4">
+    <div class="map-canvas" id="map-canvas-4"></div>
+    <div class="map-stops" id="map-stops-4"></div>
+    <a class="open-gmaps" id="open-gmaps-4" href="#" target="_blank" rel="noopener">🚗 在 Google Maps 開啟路線</a>
+  </div>
 </section>
 
 <!-- ============ DAY 5 ============ -->
 <section class="day" data-day="5">
   <header class="day-header">
-    <h2 class="day-title">Day 5 · 回程</h2>
-    <p class="day-area">5/12 (二)　釜山 ✈️ 台北</p>
+    <div>
+      <h2 class="day-title">Day 5 · 回程</h2>
+      <p class="day-area">5/12 (二)　釜山 ✈️ 台北</p>
+    </div>
   </header>
 
   <div class="timeline">
@@ -737,6 +904,141 @@
     topBtn.classList.toggle('show', window.scrollY > 400);
   });
   topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ============ Map Mode ============
+  const DAY_LOCATIONS = {
+    1: [
+      {time:"20:30", name:"Gwangan Journey",         lat:35.1578351, lng:129.116179,  type:"normal"},
+      {time:"21:30", name:"石火緣（晚餐）",            lat:35.1520998, lng:129.1170955, type:"food"},
+    ],
+    2: [
+      {time:"09:30", name:"奶奶河蜆湯（早餐）",         lat:35.1518615, lng:129.1163713, type:"food"},
+      {time:"11:00", name:"Arte Museum",             lat:35.0870682, lng:129.076373,  type:"blue"},
+      {time:"13:30", name:"影島大橋",                  lat:35.0956044, lng:129.0364923, type:"normal"},
+      {time:"15:00", name:"南浦洞市場（午餐）",          lat:35.1021681, lng:129.0259761, type:"food"},
+      {time:"18:00", name:"松島纜車",                  lat:35.0763876, lng:129.0236199, type:"blue"},
+      {time:"19:00", name:"松島龍宮橋",                lat:35.061897,  lng:129.022214,  type:"blue"},
+      {time:"21:30", name:"Nasari 食堂（晚餐）",        lat:35.1554367, lng:129.1219306, type:"food"},
+      {time:"22:00", name:"廣安里 M 燈光秀",            lat:35.1531691, lng:129.118666,  type:"normal"},
+    ],
+    3: [
+      {time:"早",    name:"Momos Coffee 總店（溫泉場）", lat:35.2193108, lng:129.0864105, type:"food"},
+      {time:"中",    name:"螞蟻家（西面）",              lat:35.1540323, lng:129.0582795, type:"food"},
+      {time:"19:00", name:"Spa Land Centum City",     lat:35.1682338, lng:129.1295279, type:"purple"},
+    ],
+    4: [
+      {time:"早",    name:"SnoopyPlace",               lat:35.1584016, lng:129.1527892, type:"food"},
+      {time:"11:30", name:"巨大排骨（午餐）",            lat:35.1615085, lng:129.1668928, type:"food"},
+      {time:"13:00", name:"自然島鹽麵包",               lat:35.1603382, lng:129.1706577, type:"food"},
+      {time:"14:00", name:"海雲台 Sky Capsule",         lat:35.158284,  lng:129.1727672, type:"purple"},
+      {time:"15:30", name:"Skyline Luge Busan",       lat:35.1940567, lng:129.2186386, type:"normal"},
+      {time:"17:30", name:"樂天 Outlet",               lat:35.1916524, lng:129.2137288, type:"normal"},
+    ],
+  };
+
+  let leafletPromise = null;
+  function loadLeaflet() {
+    if (window.L) return Promise.resolve();
+    if (leafletPromise) return leafletPromise;
+    leafletPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+      s.crossOrigin = '';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+    return leafletPromise;
+  }
+
+  const mapInstances = {};
+  async function renderMap(day) {
+    const stops = DAY_LOCATIONS[day];
+    if (!stops || !stops.length) return;
+    await loadLeaflet();
+    const canvasId = 'map-canvas-' + day;
+    const stopsId = 'map-stops-' + day;
+    const linkId = 'open-gmaps-' + day;
+
+    if (!mapInstances[day]) {
+      const map = L.map(canvasId, { zoomControl: true, attributionControl: true });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap',
+        maxZoom: 19,
+      }).addTo(map);
+      const latLngs = stops.map(s => [s.lat, s.lng]);
+      // polyline connecting stops in order
+      L.polyline(latLngs, {
+        color: '#0a3d62',
+        weight: 3,
+        opacity: 0.55,
+        dashArray: '6, 6',
+      }).addTo(map);
+      // numbered markers
+      const markers = [];
+      stops.forEach((s, i) => {
+        const icon = L.divIcon({
+          className: 'num-marker',
+          html: '<div class="marker-pin ' + s.type + '"><span>' + (i+1) + '</span></div>',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -28],
+        });
+        const m = L.marker([s.lat, s.lng], { icon }).addTo(map);
+        m.bindPopup('<strong>' + s.name + '</strong><br><span style="color:#6b7c93;font-size:12px;">' + s.time + '</span>');
+        markers.push(m);
+      });
+      map.fitBounds(L.featureGroup(markers).getBounds().pad(0.2));
+      mapInstances[day] = { map, markers };
+
+      // build stops legend
+      const stopsEl = document.getElementById(stopsId);
+      stopsEl.innerHTML = stops.map((s, i) => (
+        '<div class="map-stop" data-stop-idx="' + i + '">' +
+        '  <span class="stop-num ' + s.type + '">' + (i+1) + '</span>' +
+        '  <span class="stop-time">' + s.time + '</span>' +
+        '  <span class="stop-name">' + s.name + '</span>' +
+        '</div>'
+      )).join('');
+      stopsEl.querySelectorAll('.map-stop').forEach(el => {
+        el.addEventListener('click', () => {
+          const idx = parseInt(el.dataset.stopIdx, 10);
+          const m = mapInstances[day].markers[idx];
+          map.setView(m.getLatLng(), 15, { animate: true });
+          m.openPopup();
+        });
+      });
+
+      // Build Google Maps directions link
+      const dirUrl = 'https://www.google.com/maps/dir/' + stops.map(s => s.lat + ',' + s.lng).join('/');
+      document.getElementById(linkId).href = dirUrl;
+    } else {
+      // Force redraw on toggle (Leaflet bug when initialized while hidden)
+      setTimeout(() => mapInstances[day].map.invalidateSize(), 50);
+    }
+  }
+
+  // Hook up toggle buttons
+  document.querySelectorAll('.map-toggle').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const day = btn.dataset.toggleDay;
+      const daySection = document.querySelector('section.day[data-day="' + day + '"]');
+      const mapView = daySection.querySelector('.map-view');
+      const isOn = daySection.classList.toggle('map-mode');
+      if (isOn) {
+        mapView.classList.add('active');
+        btn.classList.add('active');
+        btn.textContent = '← 看清單';
+        await renderMap(day);
+        setTimeout(() => mapInstances[day]?.map.invalidateSize(), 100);
+      } else {
+        mapView.classList.remove('active');
+        btn.classList.remove('active');
+        btn.textContent = '📍 看地圖';
+      }
+    });
+  });
+
 </script>
 
 </body>
