@@ -147,6 +147,20 @@
     box-shadow: 0 2px 10px rgba(15,52,96,0.06), 0 1px 2px rgba(15,52,96,0.04);
     border: 1px solid rgba(0,0,0,0.03);
   }
+  .event.has-thumb { padding-right: 110px; min-height: 116px; }
+  .event-thumb {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+    background: linear-gradient(135deg, #e8eef4, #d6e0eb);
+    transition: transform 0.2s ease;
+  }
+  .event-thumb:hover { transform: scale(1.04); }
   .event::before {
     content: "";
     position: absolute;
@@ -364,7 +378,8 @@
       <p class="event-note">已預訂九人座到民宿</p>
     </article>
 
-    <article class="event">
+    <article class="event has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAGFM4bWFW2NdudmDQc6ll44BVUPaJcp1qD6gFlpHoi1xBPjiN_uGhWX95xK3dDbrfIsyXdZKrRYAdZc0Rj5HcrYIIcql2JlyOjsn1Lfhv69m6ffAlmf--yMlbfL3UBg61NuHsI--dUCuCY5=w457-h298-k-no" alt="Gwangan Journey" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">20:30</span>
       <h3 class="event-title">Gwangan Journey</h3>
       <p class="event-note">廣安里散步看夜景</p>
@@ -374,7 +389,8 @@
       </div>
     </article>
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAG2DZbML8pCxNGlhbhCSb5_0wvCLKdE2Nxbo-HS_rotfSEIAXNI4gMyZmrBC4boblNNRV3qxkw29RQsiNfb4wtWugH7I6LbM4KU1a4pnAHn9QCqmkBkfyqxmvk81-2fQKWisV8=w408-h306-k-no" alt="石火緣（晚餐）" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 21:30</span>
       <h3 class="event-title">石火緣（晚餐）</h3>
       <div class="map-links">
@@ -395,7 +411,8 @@
 
   <div class="timeline">
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAHcxJ-IvrdCm015ycfoAn9NgsGTtoBfyxzx5KqFbKAncsB3RlKHPMVJ2N2ih7w3W561XtvGFLcBnyvXS_l6-qdKwcTeT2y7Vww8S0DuhV89r5Y4yLiH1idvDnXX_j5VKVhlKmQXdHRlbglq=w408-h408-k-no" alt="奶奶河蜆湯（早餐）" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 09:30</span>
       <h3 class="event-title">奶奶河蜆湯（早餐）</h3>
       <div class="map-links">
@@ -404,7 +421,8 @@
       </div>
     </article>
 
-    <article class="event blue">
+    <article class="event blue has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAFwW99w86CSy8xfjysL8QhIsYKlBBmRkJMUs5h_ZS3xrxX8nd2CqCrla0nIU8-kokFXuywi_6NGAtWZ8quEtQPUgolb3UI3dXWc1YiJ-3lL-M5Vhs7y-TXswXkXW-2QN-nAvhVTdQ7Dzt9O=w408-h408-k-no" alt="Arte Museum" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">11:00</span>
       <h3 class="event-title">
         Arte Museum
@@ -424,7 +442,8 @@
       </details>
     </article>
 
-    <article class="event">
+    <article class="event has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAHv_vofh79ukL-JJ8HpiLAr0QtUUDig0DXySWpAFgknILDaAsKjhKKptFhDkk2uYHWsGVE-i-F2YcVA4MoWjSWIh9xO2NRsDByq5pz4TTlKjCXTNehp4VDcHR24q0caKu8cC6Qn3A=w408-h725-k-no" alt="影島大橋" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time locked">⏰ 13:30</span>
       <h3 class="event-title">影島大橋</h3>
       <p class="event-note">14:00 開橋秀</p>
@@ -434,7 +453,8 @@
       </div>
     </article>
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAEZ2mo8Mji1pw8CfGFW3oC9jIjHiaqQ06DRiWesV1CkyocZMjzyJIZzLfANQiIFNU_tT_yfGrAXOVW650A34vYazif7kcByTyMSZPK1wl_dARnUbGJikObTA3k-vdoFiDCayQXNEVFPBp6G=w408-h307-k-no" alt="南浦洞市場一帶（午餐）" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 15:00</span>
       <h3 class="event-title">南浦洞市場一帶（午餐）</h3>
       <p class="event-note"><strong>選擇 1：</strong>密陽豬肉湯飯</p>
@@ -449,7 +469,8 @@
       </div>
     </article>
 
-    <article class="event blue">
+    <article class="event blue has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAE88JJi4fhG0AjMYvEUoU9WYUi2aIwiFShKKXDnDAn91xYHEU6PfLz4ozBoEr9r6dI4T1-r4cBhDjPEb0zN7Zy-0V2KBfnGoTEx_g8Vof7P7XGk0uI7qpS7R94Z0E-hkEYOKzdN=w408-h306-k-no" alt="松島纜車" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">18:00</span>
       <h3 class="event-title">
         松島纜車
@@ -461,7 +482,8 @@
       </div>
     </article>
 
-    <article class="event blue">
+    <article class="event blue has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAGL3rfkqo80xrEwZmrys4USVb_gh0ZcRapLeQaVEdTV37xn_SWw5HnBF7TmctqH8MfFLuKNZBNSaVladcTkAJqLFxFh2E_ZqykzjKIv_zSrs0gYE8DPiKJ0F_nqgNcpzny5VTlC=w408-h306-k-no" alt="松島龍宮橋" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">19:00</span>
       <h3 class="event-title">
         松島龍宮橋
@@ -469,7 +491,8 @@
       </h3>
     </article>
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAEnKB2eOIFDzaOPmdRjwqRiBMOPLHyPYzC33ZkDtfDfBMJrSIhwaHUdSxh9w_0HNroLCNg0L-l-7AaG28w8nvf3Vt9DGuJC4A2UVuqwnjlJUMlpA4_Uj-etljUlp1Ab6Ap5mDl120PrvJ8=w426-h240-k-no" alt="Nasari 食堂（晚餐）" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 21:30</span>
       <h3 class="event-title">Nasari 食堂（晚餐）</h3>
       <div class="map-links">
@@ -499,7 +522,8 @@
 
   <div class="timeline">
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAE7wsR7hDYaB5G05XbmnxQKZZhsgt8isSm8BQgRKwEeKSkJMsgKJuJcVuuUR8wrBopNnNzmD7YkVAL6nYtmVSMB0qc7y577T_vhQS6RURp4LdrxrZC_ECeqWaqzpoH2dVyq2_-FnW96Jv0=w408-h306-k-no" alt="Momos Coffee 總店" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 早上</span>
       <h3 class="event-title">Momos Coffee 總店（溫泉場）</h3>
       <p class="event-note">7:30 開門 ‧ 早餐</p>
@@ -509,7 +533,8 @@
       </div>
     </article>
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAET6g05p3o5hLUQG5ef65BMhsw30-wFqJppkoBm87EPGHaSeJAda2rcn0aEGoMWpt6usmlDiBLxmn_Q_f5ml3EQutfAqS2skEmcX7uk0y-3Bgn_tv8UyQPm3L7hfpSDVNmFjEomPgKcY-Cu=w408-h365-k-no" alt="螞蟻家（西面）" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 中午</span>
       <h3 class="event-title">螞蟻家（西面）</h3>
       <div class="map-links">
@@ -524,7 +549,8 @@
       <p class="event-note">時間未定，視當天狀況</p>
     </article>
 
-    <article class="event purple">
+    <article class="event purple has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAE-jHF7Z3dvMpuwt7MBIV9vn94jPtfLZhIlms70VdlSRTmV-wxskemb2dCekuIa_mM4APyAW6NmWbDpO1RjtK1QYVIPq9HbIWU_PBZ0_aoCAQVvscozk3ytTKAgDZ8TFMShSwo=w408-h306-k-no" alt="Spa Land Centum City" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">19:00</span>
       <h3 class="event-title">
         Spa Land Centum City
@@ -549,7 +575,8 @@
 
   <div class="timeline">
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAFv9PGb0F8wZsMD8ZUeo-6lHaKVyXHG9drR2KelgGrHJPY6tGyez1kL1Qx3ZeKOXsb8LL1uQBEdP_-1lv0ch59126-23xlwRKFxcJwhUGlj3KYFWvMQFFhZV4_B39QnmXPOEnVncy1WsrPp=w426-h240-k-no" alt="SnoopyPlace" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 早上</span>
       <h3 class="event-title">SnoopyPlace</h3>
       <div class="map-links">
@@ -558,7 +585,8 @@
       </div>
     </article>
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAGeeS66yApmpemZSHol6v7BOfH56p7m3UNihmYBLFnfTZi_vGkcXutXUkGBLdi8Z0ypHcC4XR9mWdQ6GlPyghoZoRP3XAdnYNoPMn1PYgv29h6MPOpdOluOqp8x8V2g_3QE345V=w408-h318-k-no" alt="巨大排骨（午餐）" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 11:30</span>
       <h3 class="event-title">巨大排骨（午餐）</h3>
       <div class="map-links">
@@ -567,7 +595,8 @@
       </div>
     </article>
 
-    <article class="event food">
+    <article class="event food has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAG2LJ2W_37EH98ff6pb7D0KZMMNGNzKwWDgheT5ySngRNXWmXbV4JeKTgvZEJ6kK6GU9U0tl1nAf4VCZYmUxbalfXzI1_G4yKXqaWW9L6RDoGCwQ471oeOOk_M_Vz70EMnemC8LJF_Gqvg=w408-h306-k-no" alt="自然島鹽麵包" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">😋 13:00</span>
       <h3 class="event-title">自然島鹽麵包</h3>
       <p class="event-note"><strong>出爐時間：</strong>09:00 / 12:30 / 14:00 / 15:30 / 17:00 / 18:30</p>
@@ -577,7 +606,8 @@
       </div>
     </article>
 
-    <article class="event purple">
+    <article class="event purple has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAFIwG1_1ZnsckKysfffW8kHy5u2AzDta4dHNpxi53avvXDlP1aA8m4_Pc9wC6r6YqENSIU8F1SmdLkG4A_NNDzdVWbKglBNJFFI66MX4r5IWDBdysTWp6s5Ve4iLdxxgTkADCla=w408-h306-k-no" alt="海雲台 Sky Capsule" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time locked">⏰ 14:00 ~ 14:30</span>
       <h3 class="event-title">
         海雲台 Sky Capsule（尾浦站出發）
@@ -589,7 +619,8 @@
       </div>
     </article>
 
-    <article class="event">
+    <article class="event has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAE6BHmtCoYTKKNJsGliCObSFkIDJcPRCvqurtKXzEfJ8TlCfNotahoJRwSgE7oF8hsyOsqSBHBxGsH7GiMZCsf0uyFdPZ9R_aXF4AT8x4XnLJKxiJhQuJU9jku_ttbZymC_F4x1=w408-h288-k-no" alt="Skyline Luge Busan" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">15:30</span>
       <h3 class="event-title">Skyline Luge Busan　🛷</h3>
       <p class="event-note">滑車</p>
@@ -599,7 +630,8 @@
       </div>
     </article>
 
-    <article class="event">
+    <article class="event has-thumb">
+      <img class="event-thumb" src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAHQ7ycR6eSRvaF8bL4vBLcIhvkeqWuQwF62CjjUkqjwdfao8oD1rQ_q4cnvUIx9LOJY7-OS1J5DM3JzEstNdRIucp0NFacR6PSo9KjoT4ey3K98DmhZy7AEkZ1n7213tQTJVjLmRH7Z77b2=w408-h306-k-no" alt="樂天 Outlet" loading="lazy" referrerpolicy="no-referrer">
       <span class="event-time">17:30</span>
       <h3 class="event-title">樂天 Outlet　🛍️</h3>
       <div class="map-links">
